@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: Shop Orders API
+  version: 1.0.0
+
+components:
+  schemas:
+    Product:
+      type: object
+      x-class-extra-annotation: "@org.springframework.data.mongodb.core.mapping.Document(collection = \"products\")"
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174001
+          x-field-extra-annotation: "@org.springframework.data.annotation.Id"
+        name:
+          type: string
+          example: Laptop
+        price:
+          type: number
+          format: double
+          example: 999.99
+        required:
+          - name
+          - price
+    Order:
+      type: object
+      x-class-extra-annotation: "@org.springframework.data.mongodb.core.mapping.Document(collection = \"orders\")"
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174002
+          x-field-extra-annotation: "@org.springframework.data.annotation.Id"
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+          uniqueItems: true
+        required:
+          - products
