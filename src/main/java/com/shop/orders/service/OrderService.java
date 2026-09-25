@@ -7,8 +7,10 @@ import com.shop.orders.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -28,7 +30,7 @@ public class OrderService {
     public Order createOrder(OrderDto orderDto) {
         Order order = new Order();
         order.setId(UUID.randomUUID());
-        List<Product> products = productService.getProductsByIds(orderDto.getProductIds());
+        Set<Product> products = new LinkedHashSet<>(productService.getProductsByIds(orderDto.getProductIds()));
         order.setProducts(products);
         return orderRepository.save(order);
     }
@@ -49,7 +51,7 @@ public class OrderService {
     public Order updateOrder(UUID orderId, OrderDto updatedOrderDto) {
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order != null) {
-            List<Product> products = productService.getProductsByIds(updatedOrderDto.getProductIds());
+            Set<Product> products = new LinkedHashSet<>(productService.getProductsByIds(updatedOrderDto.getProductIds()));
             order.setProducts(products);
             return orderRepository.save(order);
         }
@@ -72,9 +74,9 @@ public class OrderService {
 
             // check if we already have the product in order
             if (product != null && !order.getProducts().contains(product)) {
-                List<Product> products = order.getProducts();
+                Set<Product> products = order.getProducts();
                 if (products == null) {
-                    order.setProducts(List.of(product));
+                    order.setProducts(Set.of(product));
                 } else products.add(product);
                 return orderRepository.save(order);
             }
@@ -87,7 +89,7 @@ public class OrderService {
     public Order removeProductFromOrder(UUID orderId, UUID productId) {
         Order order = orderRepository.findById(orderId).orElse(null);
         if (order != null) {
-            List<Product> products = order.getProducts();
+            Set<Product> products = order.getProducts();
             if (products != null) {
                 products.removeIf(product -> product.getId().equals(productId));
                 return orderRepository.save(order);
