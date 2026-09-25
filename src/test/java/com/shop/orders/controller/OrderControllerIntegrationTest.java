@@ -68,7 +68,7 @@ public class OrderControllerIntegrationTest {
         Assertions.assertEquals(HttpStatus.CREATED, responseOrder.getStatusCode());
         Assertions.assertNotNull(addedOrder);
         Assertions.assertNotNull(addedOrder.getId());
-        Assertions.assertEquals(responseProduct.getBody().getName(), addedOrder.getProducts().getFirst().getName());
+        Assertions.assertEquals(responseProduct.getBody().getName(), addedOrder.getProducts().iterator().next().getName());
         orderId = addedOrder.getId();
     }
 
@@ -136,7 +136,7 @@ public class OrderControllerIntegrationTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertNotNull(updatedOrder);
         Assertions.assertEquals(1, updatedOrder.getProducts().size());
-        Assertions.assertEquals(updatedOrder.getProducts().getFirst().getName(), productDto.getName());
+        Assertions.assertEquals(updatedOrder.getProducts().iterator().next().getName(), productDto.getName());
     }
 
     @Test

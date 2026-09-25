@@ -19,6 +19,7 @@
 	<properties>
 		<java.version>21</java.version>
 		<testcontainers.version>1.19.3</testcontainers.version>
+		<lombok.version>1.18.48</lombok.version>
 	</properties>
 
 	<dependencies>
@@ -66,7 +67,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version>
+			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -106,6 +107,20 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- JDK 23+ no longer runs annotation processors found on the classpath implicitly -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<executions>
@@ -141,7 +156,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>7.1.0</version>
+				<version>7.25.0</version>
 				<executions>
 					<execution>
 						<goals>
